@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./style.css";
 export const Button = (props) => {
-  const { text, bg, color, height, width, onClick } = props;
+  const { text, bg, color, height, width, onClick, index } = props;
 
   return (
     <button
@@ -12,7 +12,7 @@ export const Button = (props) => {
         width: width ? width : "",
       }}
       className="btn"
-      onClick={onClick}
+      onClick={() => onClick(index)}
     >
       <span className="btn-span">{text ? text : "button"}</span>
     </button>
@@ -29,6 +29,11 @@ export const StandardTextBox = (props) => {
     width,
     height,
     color,
+    name,
+    index,
+    onClick,
+    disabled,
+    opIndex,
   } = props;
 
   return (
@@ -42,19 +47,27 @@ export const StandardTextBox = (props) => {
         className="std-input-box"
         type="text"
         value={value}
-        onChange={onChange}
+        onChange={(e) => onChange(e, index, opIndex)}
         placeholder={placeholder}
+        name={name}
+        onClick={() => (onClick ? onClick(index) : null)}
+        disabled={disabled}
       />
     </div>
   );
 };
 
 export const SelectBox = (props) => {
-  const { name, options, onSelect } = props;
+  const { name, options, onChange, index } = props;
 
   return (
     <div className="select-box-div">
-      <select className="select-box" name={name} id={name}>
+      <select
+        className="select-box"
+        name={name}
+        id={name}
+        onChange={(e) => onChange(e, index)}
+      >
         {options.map((item, index) => (
           <option className="select-box-option" value={item.value}>
             {item.name}
@@ -66,18 +79,18 @@ export const SelectBox = (props) => {
 };
 
 export const Switch = (props) => {
-  const { label } = props;
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleToggle = () => {
-    setIsChecked(!isChecked);
-  };
+  const { label, onChange, value, name, index } = props;
 
   return (
     <div>
       <span className="toggle-switch-label">{label} </span>
       <label className="toggle-switch">
-        <input type="checkbox" checked={isChecked} onChange={handleToggle} />
+        <input
+          name={name}
+          type="checkbox"
+          checked={value}
+          onChange={() => onChange(name, index)}
+        />
         <span className="slider"></span>
       </label>
     </div>

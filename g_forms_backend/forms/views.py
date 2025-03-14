@@ -24,6 +24,7 @@ class FormsView(viewsets.ViewSet):
         if serializer.is_valid():
             form_instance = serializer.create(serializer.data)
             form_name = form_instance.name
-            return Response({"message":f"{form_name} Create Successs"})
+            link = f"http://localhost:5173/?pk={form_instance.id}/"
+            return Response({"message":f"{form_name} Create Successs","link":link})
         else:
             return Response({"message":"Create Failed","errors":serializer.errors})

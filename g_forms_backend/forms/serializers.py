@@ -16,7 +16,7 @@ class QuestionCreateSerializers(serializers.Serializer):
 
 class FormCreateSerializers(serializers.Serializer):
     name = serializers.CharField()
-    description = serializers.CharField()
+    description = serializers.CharField(allow_blank=True)
     questions = QuestionCreateSerializers(many=True)
 
     
