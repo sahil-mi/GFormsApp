@@ -7,49 +7,48 @@ class OptionCreateSerializers(serializers.Serializer):
     option = serializers.CharField()
     is_answer = serializers.BooleanField()
 
-
-
-class FormCreateSerializers(serializers.Serializer):
-    name = serializers.CharField()
-    description = serializers.CharField()
+class QuestionCreateSerializers(serializers.Serializer):
     question = serializers.CharField()
     type_question = serializers.CharField()
     is_required = serializers.BooleanField()
     answer = serializers.CharField()
-
     options = OptionCreateSerializers(many=True,required=False)
+
+class FormCreateSerializers(serializers.Serializer):
+    name = serializers.CharField()
+    description = serializers.CharField()
+    questions = QuestionCreateSerializers(many=True)
+
+    
 
 
     def create(self,validated_data):
         name = validated_data.get("name")
         description = validated_data.get("description")
-        question = validated_data.get("question")
-        type_question = validated_data.get("type_question")
-        is_required = validated_data.get("is_required")
-        answer = validated_data.get("answer")
+        questions = validated_data.get("questions")
 
-        options = validated_data.get("options")
 
         form_instance = Form.objects.create(
             name = name,
             description = description
         )
 
-        question_instance = Question.objects.create(
-            question=question,
-            type_question=type_question,
-            is_required=is_required,
-            answer=answer,
-            form = form_instance
-        )
-
-
-        for item in options:
-            Option.objects.create(
-                option = item["option"],
-                is_answer = item["is_answer"],
-                question = question_instance
+        for question_item in questions:
+            question_instance = Question.objects.create(
+                question=question_item["question"],
+                type_question=question_item["type_question"],
+                is_required=question_item["is_required"],
+                answer=question_item["answer"],
+                form = form_instance
             )
+
+            options = question_item.get("options")
+            for item in options:
+                Option.objects.create(
+                    option = item["option"],
+                    is_answer = item["is_answer"],
+                    question = question_instance
+                )
 
         return form_instance
 
