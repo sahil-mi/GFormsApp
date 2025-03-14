@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   CheckBox,
@@ -14,6 +14,10 @@ const optionsList = [
 ];
 
 const Forms = () => {
+  const url = new URL(window.location.href);
+  const pk = url.searchParams.get("pk");
+  console.log(pk);
+
   const [state, setState] = useState({
     name: "Untitled form",
     description: "",
@@ -24,7 +28,7 @@ const Forms = () => {
       question: "Please share your thoughts:",
       type_question: "0",
       is_required: false,
-      answer: "Your service is excellent",
+      answer: "",
       options: [],
     },
   ]);
@@ -76,18 +80,6 @@ const Forms = () => {
     setQuestions(new_questions);
   };
 
-  // const optionOnChange = (e, index, opIndex) => {
-  //   if (e) {
-  //     let name = e.target.name;
-  //     let value = e.target.value;
-  //     console.log(value);
-
-  //     let new_questions = [...questions];
-  //     let new_options = [...new_questions[index].options];
-  //     new_options[opIndex][name] = value;
-  //   }
-  // };
-
   const optionOnChange = (e, index, opIndex) => {
     if (e) {
       const { name, value } = e.target;
@@ -111,6 +103,19 @@ const Forms = () => {
     }
   };
 
+  const addNew = () => {
+    let new_questions = [...questions];
+    new_questions.push({
+      question: "Please share your thoughts:",
+      type_question: "0",
+      is_required: false,
+      answer: "",
+      options: [],
+    });
+    setQuestions([...new_questions]);
+  };
+
+  //publish the data
   const onPublish = async () => {
     let payload = {
       ...state,
@@ -125,28 +130,52 @@ const Forms = () => {
       body: JSON.stringify(payload),
     });
   };
+  //get form data
+  const get_form = async () => {
+    const url = `http://127.0.0.1:8000/api/forms/${pk}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
 
-  console.log(questions, "~~~questions");
+      const json = await response.json();
+      setState({ name: json.name, description: json.description });
+      setQuestions([...json.questions]);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  //if pk found calling api to fetch data
+  useEffect(() => {
+    if (pk) {
+      get_form();
+    }
+  }, []);
+  console.log(questions, "================");
+
   return (
     <section>
       {/*--------------------- ---Navbar--------------------------- */}
-      <nav>
-        <div className="publish-div">
-          <Button
-            text="Publish"
-            bg="rgb(103, 58, 183)"
-            color="white"
-            height="40px"
-            width="150px"
-            onClick={onPublish}
-          />
-        </div>
-      </nav>
+      {!pk ? (
+        <nav>
+          <div className="publish-div">
+            <Button
+              text="Publish"
+              bg="rgb(103, 58, 183)"
+              color="white"
+              height="40px"
+              width="150px"
+              onClick={onPublish}
+            />
+          </div>
+        </nav>
+      ) : null}
       {/*---------------------------- Main Body-------------------- */}
       <section className="main-body">
         <div className="form-box-list">
           {/* ================head section=============== */}
-
           <div className="form-box-head">
             <div className="form-head-top"></div>
             <div style={{ display: "flex" }}>
@@ -170,15 +199,14 @@ const Forms = () => {
             </div>
           </div>
           {/* ===================ITEMS=================== */}
-
-          {questions.map((i, index) => (
+          {questions?.map((i, index) => (
             <div className="form-box-item">
               <div className="form-box-item-line-1">
                 <StandardTextBox
                   index={index}
                   name="question"
                   onChange={questionOnChange}
-                  value={i.question}
+                  value={i?.question}
                   fontSize="16px"
                   width="400px"
                 />
@@ -261,11 +289,22 @@ const Forms = () => {
                 </div>
               )}
 
-              <div className="options-menu">
-                <div>
-                  <span>ADD NEW</span>
+              {questions.length - 1 === index ? (
+                <div className="options-menu">
+                  <div>
+                    {/* <span>ADD NEW</span> */}
+                    {/* <button>ADD NEW</button> */}
+                    <Button
+                      text="Add New"
+                      bg="#fff"
+                      color="black"
+                      height="40px"
+                      width="150px"
+                      onClick={addNew}
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : null}
 
               <div className="form-box-item-line-3">
                 <Switch

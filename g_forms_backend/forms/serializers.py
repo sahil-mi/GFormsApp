@@ -11,15 +11,13 @@ class QuestionCreateSerializers(serializers.Serializer):
     question = serializers.CharField()
     type_question = serializers.CharField()
     is_required = serializers.BooleanField()
-    answer = serializers.CharField()
+    answer = serializers.CharField(allow_blank=True)
     options = OptionCreateSerializers(many=True,required=False)
 
 class FormCreateSerializers(serializers.Serializer):
     name = serializers.CharField()
     description = serializers.CharField(allow_blank=True)
     questions = QuestionCreateSerializers(many=True)
-
-    
 
 
     def create(self,validated_data):
@@ -56,23 +54,26 @@ class FormCreateSerializers(serializers.Serializer):
 """
 When user rretrive data this will be serialize the data to json
 """
-class QuestionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Question
-        fields = "__all__"
+
 
 class OptionSerializer(serializers.ModelSerializer):
-    options = serializers.SerializerMethodField()
     
     class Meta:
         model = Option
         fields = "__all__"
     
-    def get_options(self,question_data):
-        options_queryset = serializers.SerializerMethodField()
-        options_data = QuestionSerializer(options_queryset).data
-        return options_data
 
+class QuestionSerializer(serializers.ModelSerializer):
+    options = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Question
+        fields = "__all__"
+
+    def get_options(self,question_data):
+        options_queryset = Option.objects.filter(question = question_data)
+        options_data = OptionSerializer(options_queryset,many=True).data
+        return options_data
 
 class FormSerializer(serializers.ModelSerializer):
     questions = serializers.SerializerMethodField()
