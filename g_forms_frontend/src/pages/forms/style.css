@@ -99,11 +99,11 @@
   background-color: #fff;
   width: 12%;
   height: auto;
-  border: 1px solid rgb(218, 220, 224);
-  border-radius: 8px;
+  /* border: 1px solid rgb(218, 220, 224); */
+  /* border-radius: 8px;
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
     0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1); */
   /* margin-bottom: 15px; */
   position: relative;
   left: 800px;
