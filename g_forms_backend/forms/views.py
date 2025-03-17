@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404, render
 from rest_framework import viewsets
 from rest_framework.response import Response
 # Create your views here.
-from.models import Form
-from.serializers import FormSerializer,FormCreateSerializers
+from.models import Answer, Form
+from.serializers import AnswerCreateSerializer, FormSerializer,FormCreateSerializers
 
 class FormsView(viewsets.ViewSet):
 
@@ -28,3 +28,19 @@ class FormsView(viewsets.ViewSet):
             return Response({"message":f"{form_name} Create Successs","link":link})
         else:
             return Response({"message":"Create Failed","errors":serializer.errors})
+
+
+
+class FormsAnswering(viewsets.ViewSet):
+    queryset = Answer.objects.all()
+   
+
+    def create(self,request):
+        serializer = AnswerCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.create(serializer.data)
+            return Response({"message":"Answer Submitted Successfully"})
+        else:
+            return Response({"message":"Create Failed","errors":serializer.errors})
+
+    
