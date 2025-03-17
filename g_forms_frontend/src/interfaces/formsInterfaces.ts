@@ -107,6 +107,7 @@ export interface FormViewProps {
     questionIndex: number,
     optionIndex: number
   ) => void;
+  handleClickSubmit: () => void;
 }
 
 export interface AnswerInterface {

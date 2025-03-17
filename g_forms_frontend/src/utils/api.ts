@@ -31,3 +31,15 @@ export const getFormData = async (
     return null;
   }
 };
+
+export const submitForm = async (payload) => {
+  console.log(payload, "clickee");
+
+  const response = await fetch(base_url + "api/forms/answer/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+};

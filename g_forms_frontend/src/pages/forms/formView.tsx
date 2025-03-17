@@ -3,6 +3,7 @@ import { QuestionsBox } from "./questionsBox";
 import StandardTextBox from "../../components/standardTextBox";
 import { QuestionsViewBox } from "./questionsViewBox";
 import { FormViewProps } from "../../interfaces/formsInterfaces";
+import Button from "../../components/button";
 
 const FormView: React.FC<FormViewProps> = (props) => {
   const {
@@ -11,6 +12,7 @@ const FormView: React.FC<FormViewProps> = (props) => {
     handleShortAnswers,
     handleOptions,
     handleMultipleChoiceAnswers,
+    handleClickSubmit,
   } = props;
   return (
     <section className="main-body">
@@ -51,6 +53,16 @@ const FormView: React.FC<FormViewProps> = (props) => {
             />
           </>
         ))}
+        <div>
+          <Button
+            text="Submit"
+            bg="rgb(103, 58, 183)"
+            color="white"
+            height="40px"
+            width="150px"
+            onClick={handleClickSubmit}
+          />
+        </div>
       </div>
     </section>
   );

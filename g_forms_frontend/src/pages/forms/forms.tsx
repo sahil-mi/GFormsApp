@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CreateForm from "./createForm";
-import { getFormData, publishForm } from "../../utils/api";
+import { getFormData, publishForm, submitForm } from "../../utils/api";
 import FormView from "./formView";
 import {
   AnswerInterface,
@@ -158,6 +158,24 @@ const NewForms = () => {
     setQuestions(new_questions);
   };
 
+  const handleClickSubmit = (): void => {
+    let payload = [];
+
+    for (let i of questions) {
+      let question_id = i.id;
+      let answer = i.answer;
+
+      if (i.type_question == "1") {
+        answer = i.options.find((i) => i.is_answer === true)?.option;
+      }
+      if (answer) {
+        payload.push({ question_id, answer });
+      }
+    }
+
+    submitForm({ data: payload });
+  };
+
   useEffect(() => {
     if (formUniqID) {
       FetchFormData();
@@ -174,6 +192,7 @@ const NewForms = () => {
           handleShortAnswers={handleShortAnswers}
           handleOptions={handleOptions}
           handleMultipleChoiceAnswers={handleMultipleChoiceAnswers}
+          handleClickSubmit={handleClickSubmit}
         />
       ) : (
         <CreateForm
