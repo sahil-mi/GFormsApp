@@ -16,7 +16,6 @@ const optionsList = [
 const Forms = () => {
   const url = new URL(window.location.href);
   const pk = url.searchParams.get("pk");
-  console.log(pk);
 
   const [state, setState] = useState({
     name: "Untitled form",
@@ -25,7 +24,7 @@ const Forms = () => {
 
   const [questions, setQuestions] = useState([
     {
-      question: "Please share your thoughts:",
+      question: "Untitled Question",
       type_question: "0",
       is_required: false,
       answer: "",
@@ -35,8 +34,6 @@ const Forms = () => {
 
   const onChange = (e) => {
     if (e) {
-      console.log(e);
-
       let name = e.target.name;
       let value = e.target.value;
 
@@ -45,8 +42,6 @@ const Forms = () => {
   };
 
   const questionOnChange = (e, index) => {
-    console.log(e, index);
-
     if (e) {
       let name = e.target.name;
       let value = e.target.value;
@@ -64,8 +59,6 @@ const Forms = () => {
   };
 
   const addNewOption = (index, is_other = false) => {
-    console.log(is_other, "is_other");
-
     let new_questions = [...questions];
     let value = `Option ${new_questions[index].options.length + 1}`;
     if (is_other) {
@@ -106,7 +99,7 @@ const Forms = () => {
   const addNew = () => {
     let new_questions = [...questions];
     new_questions.push({
-      question: "Please share your thoughts:",
+      question: "Untitled Question",
       type_question: "0",
       is_required: false,
       answer: "",
@@ -153,7 +146,6 @@ const Forms = () => {
       get_form();
     }
   }, []);
-  console.log(questions, "================");
 
   return (
     <section>
@@ -179,7 +171,7 @@ const Forms = () => {
           <div className="form-box-head">
             <div className="form-head-top"></div>
             <div style={{ display: "flex" }}>
-              <div className="form-head-left"></div>
+              {/* <div className="form-head-left"></div> */}
 
               <div className="form-head-inputs">
                 <StandardTextBox
@@ -202,21 +194,34 @@ const Forms = () => {
           {questions?.map((i, index) => (
             <div className="form-box-item">
               <div className="form-box-item-line-1">
-                <StandardTextBox
-                  index={index}
-                  name="question"
-                  onChange={questionOnChange}
-                  value={i?.question}
-                  fontSize="16px"
-                  width="400px"
-                />
-                <SelectBox
-                  index={index}
-                  name="type_question"
-                  onChange={questionOnChange}
-                  value={i.type_question}
-                  options={optionsList}
-                />
+                {!pk ? (
+                  <>
+                    <StandardTextBox
+                      index={index}
+                      name="question"
+                      onChange={questionOnChange}
+                      value={i?.question}
+                      fontSize="16px"
+                      width="400px"
+                    />
+                    <SelectBox
+                      index={index}
+                      name="type_question"
+                      onChange={questionOnChange}
+                      value={i.type_question}
+                      options={optionsList}
+                    />
+                  </>
+                ) : (
+                  <p>
+                    {i.question}
+                    {i.is_required ? (
+                      <span style={{ color: "red" }} class="required">
+                        *
+                      </span>
+                    ) : null}
+                  </p>
+                )}
               </div>
 
               {/*-------------- Short answer section------------- */}
@@ -226,11 +231,11 @@ const Forms = () => {
                     index={index}
                     name="answer"
                     onChange={questionOnChange}
-                    value={""}
+                    value={i.answer}
                     fontSize="16px"
                     width="400px"
                     placeholder="Short answer text"
-                    disabled={true}
+                    disabled={pk ? false : true}
                   />
                 </div>
               ) : (
@@ -254,7 +259,10 @@ const Forms = () => {
 
                   <div className="add-option-div">
                     <div>
-                      <CheckBox disabled={true} showLabel={false} />
+                      <CheckBox
+                        disabled={pk ? false : true}
+                        showLabel={false}
+                      />
                     </div>
                     <div>
                       <StandardTextBox
@@ -289,7 +297,7 @@ const Forms = () => {
                 </div>
               )}
 
-              {questions.length - 1 === index ? (
+              {questions.length - 1 === index && !pk ? (
                 <div className="options-menu">
                   <div>
                     {/* <span>ADD NEW</span> */}
@@ -307,13 +315,15 @@ const Forms = () => {
               ) : null}
 
               <div className="form-box-item-line-3">
-                <Switch
-                  index={index}
-                  name="is_required"
-                  onChange={questionToggleChange}
-                  value={i.is_required}
-                  label="Required"
-                />
+                {!pk ? (
+                  <Switch
+                    index={index}
+                    name="is_required"
+                    onChange={questionToggleChange}
+                    value={i.is_required}
+                    label="Required"
+                  />
+                ) : null}
               </div>
             </div>
           ))}

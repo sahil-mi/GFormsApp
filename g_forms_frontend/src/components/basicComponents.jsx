@@ -113,7 +113,7 @@ export const CheckBox = (props) => {
         checked={isChecked}
         onChange={handleToggle}
         type="checkbox"
-        disabled
+        disabled={disabled}
       />
       {showLabel === false ? null : (
         <label
