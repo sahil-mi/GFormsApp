@@ -20,10 +20,7 @@ interface Question {
 
 interface CreateFormProps {
   handleClickPublishButton: () => void;
-  state: {
-    name: string;
-    description: string;
-  };
+  state: FormState;
   questions: Question[];
   handleTitleAndDescription: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleQuestion: (
@@ -37,6 +34,7 @@ interface CreateFormProps {
   ) => void;
   addNewQuestion: () => void;
   addNewOption: (index: number, is_other: boolean) => void;
+  handleQuestionRequiredToggle: (name: string, index: number) => void;
 }
 
 interface publishFormPayload {
@@ -77,15 +75,20 @@ interface MultipleChoiceSectionProps {
 interface QuestionsBoxProps {
   questionItem: Question;
   questionIndex: number;
-  handleQuestion: (
+  handleQuestion?: (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => void;
-  handleOptions: (
+  handleOptions?: (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
     opIndex: number
   ) => void;
-  addNewQuestion: () => void;
-  addNewOption: (index: number, is_other: boolean) => void;
+  addNewQuestion?: () => void;
+  addNewOption?: (index: number, is_other: boolean) => void;
+}
+
+interface FormView {
+  questions: Question[];
+  state: FormState;
 }

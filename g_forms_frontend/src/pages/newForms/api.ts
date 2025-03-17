@@ -1,6 +1,6 @@
 const base_url = "http://127.0.0.1:8000/";
 
-const publishForm = async (payload: publishFormPayload) => {
+export const publishForm = async (payload: publishFormPayload) => {
   const response = await fetch(base_url + "api/forms/", {
     method: "POST",
     headers: {
@@ -10,7 +10,7 @@ const publishForm = async (payload: publishFormPayload) => {
   });
 };
 
-const getFormData = async (
+export const getFormData = async (
   formUniqID: number | string
 ): Promise<FormResponseData | null> => {
   const url = base_url + `api/forms/${formUniqID}`;

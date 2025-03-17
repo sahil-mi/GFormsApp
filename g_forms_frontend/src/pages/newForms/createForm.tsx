@@ -1,150 +1,9 @@
 import React from "react";
 import Button from "../../components/button";
 import StandardTextBox from "../../components/standardTextBox";
-import SelectBox from "../../components/selectBox";
 import "./style.css";
-import { CheckBox } from "../../components/checkBox";
-const questionTypes = [
-  { name: "Short answer", value: "0" },
-  { name: "Multiple choice", value: "1" },
-];
-
-export const ShortAnswerSection = ({ questionItem, questionIndex }) => {
-  return (
-    <div className="form-box-item-line-2">
-      <StandardTextBox
-        index={questionIndex}
-        name="answer"
-        // onChange={questionOnChange}
-        value={questionItem.answer}
-        fontSize="16px"
-        width="400px"
-        placeholder="Short answer text"
-        // disabled={pk ? false : true}
-        disabled
-      />
-    </div>
-  );
-};
-
-// export const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps>  = ({
-export const MultipleChoiceSection = ({
-  questionIndex,
-  optionItem,
-  optionIndex,
-  handleOptions,
-}) => {
-  return (
-    <>
-      <CheckBox label={optionItem.option} showLabel={false} />
-      <StandardTextBox
-        value={optionItem.option}
-        fontSize="14px"
-        width="100%"
-        color="black"
-        index={questionIndex}
-        opIndex={optionIndex}
-        name="option"
-        onChange={handleOptions}
-      />
-    </>
-  );
-};
-
-export const QuestionsBox: React.FC<QuestionsBoxProps> = ({
-  questionItem,
-  questionIndex,
-  handleQuestion,
-  handleOptions,
-  addNewQuestion,
-  addNewOption,
-}) => {
-  return (
-    <div className="form-box-item">
-      {/* QUESTION AND QUESTION TYPE */}
-      <div className="form-box-item-line-1">
-        <StandardTextBox
-          index={questionIndex}
-          name="question"
-          onChange={handleQuestion}
-          value={questionItem?.question}
-          fontSize="16px"
-          width="400px"
-        />
-        <SelectBox
-          index={questionIndex}
-          name="type_question"
-          onChange={handleQuestion}
-          value={questionItem.type_question}
-          options={questionTypes}
-        />
-      </div>
-
-      {questionItem.type_question === "0" ? (
-        //SHORT ANSWER
-        <div className="form-box-item-line-2">
-          <ShortAnswerSection
-            questionItem={questionItem}
-            questionIndex={questionIndex}
-          />
-        </div>
-      ) : (
-        //  MULTIPLE CHOICE
-        <>
-          {/*  OPTIONS SHOWING  */}
-          <div className="form-box-item-line-2">
-            {questionItem.options.map((optionItem, optionIndex) => (
-              <div className="option-div">
-                <MultipleChoiceSection
-                  key={`${questionIndex}-${optionIndex}`}
-                  optionItem={optionItem}
-                  optionIndex={optionIndex}
-                  questionIndex={questionIndex}
-                  handleOptions={handleOptions}
-                />
-              </div>
-            ))}
-            {/* ADD NEW OPTION */}
-            <div className="add-option-div">
-              <div>
-                <CheckBox disabled showLabel={false} />
-              </div>
-              <div>
-                <StandardTextBox
-                  index={questionIndex}
-                  value=""
-                  placeholder="Add option"
-                  fontSize="14px"
-                  width="100px"
-                  onClick={addNewOption}
-                />
-              </div>
-              {/* ADD OPTION OTHER */}
-              {questionItem?.is_other === true ? null : (
-                <>
-                  <div>
-                    <span style={{ marginLeft: "10px" }}>or</span>
-                  </div>
-                  <div>
-                    <Button
-                      index={questionIndex}
-                      text={"Add 'other'"}
-                      bg="#fff"
-                      color="#1a73e8"
-                      height="40px"
-                      width="100px"
-                      onClick={() => addNewOption(questionIndex, true)}
-                    />
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
+import { QuestionsBox } from "./questionsBox";
+import { Switch } from "../../components/switch";
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   let {
@@ -156,6 +15,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     handleOptions,
     addNewQuestion,
     addNewOption,
+    handleQuestionRequiredToggle,
   } = props;
   return (
     <div>
@@ -200,14 +60,44 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           {/* ===================ITEMS=================== */}
 
           {questions.map((questionItem, questionIndex) => (
-            <QuestionsBox
-              questionItem={questionItem}
-              questionIndex={questionIndex}
-              handleQuestion={handleQuestion}
-              handleOptions={handleOptions}
-              addNewQuestion={addNewQuestion}
-              addNewOption={addNewOption}
-            />
+            <div className="form-box-item">
+              {/* Question box */}
+              <QuestionsBox
+                questionItem={questionItem}
+                questionIndex={questionIndex}
+                handleQuestion={handleQuestion}
+                handleOptions={handleOptions}
+                addNewQuestion={addNewQuestion}
+                addNewOption={addNewOption}
+              />
+
+              {/* Add New Question button */}
+              {questions.length - 1 === questionIndex ? (
+                <div className="options-menu">
+                  <div>
+                    <Button
+                      text="Add New"
+                      bg="#fff"
+                      color="black"
+                      height="40px"
+                      width="150px"
+                      onClick={addNewQuestion}
+                    />
+                  </div>
+                </div>
+              ) : null}
+
+              {/* Required toggle button */}
+              <div className="form-box-item-line-3">
+                <Switch
+                  index={questionIndex}
+                  name="is_required"
+                  onChange={handleQuestionRequiredToggle}
+                  value={questionItem.is_required}
+                  label="Required"
+                />
+              </div>
+            </div>
           ))}
         </div>
       </section>

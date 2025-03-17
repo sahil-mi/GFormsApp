@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CreateForm from "./createForm";
+import { getFormData, publishForm } from "./api";
+import FormView from "./formView";
 
 const NewForms = () => {
   //From url taking form uniq id
@@ -135,7 +137,9 @@ const NewForms = () => {
 
   return (
     <section>
-      {formUniqID ? null : (
+      {formUniqID ? (
+        <FormView questions={questions} state={state} />
+      ) : (
         <CreateForm
           questions={questions}
           handleTitleAndDescription={handleTitleAndDescription}
@@ -145,6 +149,7 @@ const NewForms = () => {
           handleOptions={handleOptions}
           addNewQuestion={addNewQuestion}
           addNewOption={addNewOption}
+          handleQuestionRequiredToggle={handleQuestionRequiredToggle}
         />
       )}
     </section>
