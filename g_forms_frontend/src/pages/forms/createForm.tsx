@@ -4,6 +4,7 @@ import StandardTextBox from "../../components/standardTextBox";
 import "./style.css";
 import { QuestionsBox } from "./questionsBox";
 import { Switch } from "../../components/switch";
+import { CreateFormProps } from "../../interfaces/formsInterfaces";
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   let {

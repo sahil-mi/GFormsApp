@@ -86,3 +86,34 @@ class FormSerializer(serializers.ModelSerializer):
         question_queryset = Question.objects.filter(form = form_data)
         question_data = QuestionSerializer(question_queryset,many=True).data
         return question_data
+
+
+
+"""
+When user submitting the form
+"""
+
+class AnswerSerializer(serializers.Serializer):
+    question_id = serializers.IntegerField()
+    answer = serializers.CharField()  
+
+
+    def validate_question_id(self,question_id):
+        if not Question.objects.filter(id= question_id).exists():
+            raise serializers.ValidationError("Question is not exist!")
+        else:
+            return question_id
+class AnswerCreateSerializer(serializers.Serializer):
+    data = AnswerSerializer(many=True)
+
+    
+    def create(self,validated_data):
+        for validated_data_item in validated_data["data"]:
+            question_id = validated_data_item.get("question_id")
+            answer = validated_data_item.get("answer")
+            question_instance = Question.objects.get(id=question_id)
+
+            answer_instance = Answer.objects.create(
+                question=question_instance,
+                answer=answer
+            )

@@ -6,7 +6,14 @@ import { MultipleChoiceSection } from "./multipleChoiceSection";
 import { ShortAnswerSection } from "./shortAnswerSection";
 
 export const QuestionsViewBox = (props) => {
-  const { questionItem, questionIndex } = props;
+  const {
+    questionItem,
+    questionIndex,
+    handleShortAnswers,
+    handleOptions,
+    handleMultipleChoiceAnswers,
+  } = props;
+
   return (
     <div className="form-box-item">
       {/* QUESTION AND QUESTION TYPE */}
@@ -27,6 +34,8 @@ export const QuestionsViewBox = (props) => {
           <ShortAnswerSection
             questionItem={questionItem}
             questionIndex={questionIndex}
+            handleChange={handleShortAnswers}
+            disabled={false}
           />
         </div>
       ) : (
@@ -41,7 +50,10 @@ export const QuestionsViewBox = (props) => {
                   optionItem={optionItem}
                   optionIndex={optionIndex}
                   questionIndex={questionIndex}
-                  //   handleOptions={handleOptions}
+                  handleOptions={handleOptions}
+                  checked={optionItem.is_answer}
+                  handleMultipleChoiceAnswers={handleMultipleChoiceAnswers}
+                  disabled={false}
                 />
               </div>
             ))}

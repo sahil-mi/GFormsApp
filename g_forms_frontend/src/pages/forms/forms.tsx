@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import CreateForm from "./createForm";
-import { getFormData, publishForm } from "./api";
+import { getFormData, publishForm } from "../../utils/api";
 import FormView from "./formView";
+import {
+  AnswerInterface,
+  FormState,
+  Question,
+} from "../../interfaces/formsInterfaces";
 
 const NewForms = () => {
   //From url taking form uniq id
@@ -76,7 +81,6 @@ const NewForms = () => {
   ): void => {
     if (e) {
       const { name, value } = e.target;
-
       // Create a deep copy of the questions array
       const new_questions = [...questions];
 
@@ -127,18 +131,50 @@ const NewForms = () => {
     }
   };
 
+  const handleShortAnswers = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ): void => {
+    if (e) {
+      let name = e.target.name;
+      let value = e.target.value;
+      let new_questions = [...questions];
+      new_questions[index].answer = value;
+      setQuestions(new_questions);
+    }
+  };
+
+  const handleMultipleChoiceAnswers = (questionIndex, optionIndex) => {
+    let new_questions = [...questions];
+    new_questions[questionIndex].options.forEach((i, i_index) => {
+      if (optionIndex !== i_index) {
+        i.is_answer = false;
+      }
+    });
+    let current_value =
+      new_questions[questionIndex].options[optionIndex].is_answer;
+    new_questions[questionIndex].options[optionIndex].is_answer =
+      !current_value;
+    setQuestions(new_questions);
+  };
+
   useEffect(() => {
     if (formUniqID) {
       FetchFormData();
     }
   }, []);
 
-  console.log(questions, "<<<<<<questions--------------");
-
+  console.log(questions, "questions");
   return (
     <section>
       {formUniqID ? (
-        <FormView questions={questions} state={state} />
+        <FormView
+          questions={questions}
+          state={state}
+          handleShortAnswers={handleShortAnswers}
+          handleOptions={handleOptions}
+          handleMultipleChoiceAnswers={handleMultipleChoiceAnswers}
+        />
       ) : (
         <CreateForm
           questions={questions}

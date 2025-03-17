@@ -8,10 +8,22 @@ export const MultipleChoiceSection = ({
   optionItem,
   optionIndex,
   handleOptions,
+  disabled,
+  checked,
+  handleMultipleChoiceAnswers,
 }) => {
   return (
     <>
-      <CheckBox label={optionItem.option} showLabel={false} />
+      <CheckBox
+        name={name}
+        label={optionItem.option}
+        showLabel={false}
+        disabled={disabled}
+        handleToggle={() =>
+          handleMultipleChoiceAnswers(questionIndex, optionIndex)
+        }
+        checked={checked}
+      />
       <StandardTextBox
         value={optionItem.option}
         fontSize="14px"
@@ -21,6 +33,7 @@ export const MultipleChoiceSection = ({
         opIndex={optionIndex}
         name="option"
         onChange={handleOptions}
+        disabled={disabled}
       />
     </>
   );

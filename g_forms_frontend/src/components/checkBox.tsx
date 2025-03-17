@@ -1,19 +1,16 @@
+import React from "react";
 import { useState } from "react";
 
 export const CheckBox = (props) => {
-  const { disabled, label, showLabel } = props;
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleToggle = () => {
-    setIsChecked(!isChecked);
-  };
+  const { checked, disabled, label, showLabel, handleToggle } = props;
+  // const [isChecked, setIsChecked] = useState(false);
 
   return (
     <div className="checkbox-container">
       <input
         id="custom-checkbox"
         className="checkbox-input"
-        checked={isChecked}
+        checked={checked}
         onChange={handleToggle}
         type="checkbox"
         disabled={disabled}

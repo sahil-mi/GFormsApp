@@ -5,6 +5,7 @@ import SelectBox from "../../components/selectBox";
 import { MultipleChoiceSection } from "./multipleChoiceSection";
 import { ShortAnswerSection } from "./shortAnswerSection";
 import { CheckBox } from "../../components/checkBox";
+import { QuestionsBoxProps } from "../../interfaces/formsInterfaces";
 const questionTypes = [
   { name: "Short answer", value: "0" },
   { name: "Multiple choice", value: "1" },
@@ -44,6 +45,8 @@ export const QuestionsBox: React.FC<QuestionsBoxProps> = ({
           <ShortAnswerSection
             questionItem={questionItem}
             questionIndex={questionIndex}
+            disabled={true}
+            handleChange={null}
           />
         </div>
       ) : (
@@ -59,6 +62,9 @@ export const QuestionsBox: React.FC<QuestionsBoxProps> = ({
                   optionIndex={optionIndex}
                   questionIndex={questionIndex}
                   handleOptions={handleOptions}
+                  disabled={true}
+                  checked={false}
+                  handleMultipleChoiceAnswers={null}
                 />
               </div>
             ))}
@@ -75,6 +81,7 @@ export const QuestionsBox: React.FC<QuestionsBoxProps> = ({
                   fontSize="14px"
                   width="100px"
                   onClick={addNewOption}
+                  disabled={false}
                 />
               </div>
               {/* ADD OPTION OTHER */}

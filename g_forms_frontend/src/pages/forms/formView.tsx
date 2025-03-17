@@ -2,9 +2,16 @@ import React from "react";
 import { QuestionsBox } from "./questionsBox";
 import StandardTextBox from "../../components/standardTextBox";
 import { QuestionsViewBox } from "./questionsViewBox";
+import { FormViewProps } from "../../interfaces/formsInterfaces";
 
-const FormView: React.FC<FormView> = (props) => {
-  const { state, questions } = props;
+const FormView: React.FC<FormViewProps> = (props) => {
+  const {
+    state,
+    questions,
+    handleShortAnswers,
+    handleOptions,
+    handleMultipleChoiceAnswers,
+  } = props;
   return (
     <section className="main-body">
       <div className="form-box-list">
@@ -38,6 +45,9 @@ const FormView: React.FC<FormView> = (props) => {
             <QuestionsViewBox
               questionItem={questionItem}
               questionIndex={questionIndex}
+              handleShortAnswers={handleShortAnswers}
+              handleOptions={handleOptions}
+              handleMultipleChoiceAnswers={handleMultipleChoiceAnswers}
             />
           </>
         ))}

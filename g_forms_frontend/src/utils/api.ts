@@ -1,3 +1,8 @@
+import {
+  FormResponseData,
+  publishFormPayload,
+} from "../interfaces/formsInterfaces";
+
 const base_url = "http://127.0.0.1:8000/";
 
 export const publishForm = async (payload: publishFormPayload) => {

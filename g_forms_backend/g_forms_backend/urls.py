@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 
-from forms.views import FormsView
+from forms.views import FormsAnswering, FormsView
 
 
 #setting router
@@ -35,4 +35,6 @@ urlpatterns = [
     path('api/forms/', FormsView.as_view({'get': 'list'}), name='forms_list'),
     path('api/forms/', FormsView.as_view({'post': 'create'}), name='forms_create'),
     path('api/forms/<int:pk>/', FormsView.as_view({'get': 'retrive'}), name='forms_create'),
+    path('api/forms/answer/', FormsAnswering.as_view({'post': 'create'}), name='forms_answer_create'),
+
 ]
